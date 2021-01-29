@@ -18,3 +18,5 @@ set_value!(b, 3)
 @timev set_possible_values!(a, s)
 
 @assert 3 ∉ a.possible_values "set_possible_values! is broken"
+
+print(s)

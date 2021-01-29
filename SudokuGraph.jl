@@ -40,15 +40,23 @@ function get_node(coordinates::Tuple{Int,Int}, graph::SudokuGraph)::SudokuNode
 end
 
 function Base.print(g::SudokuGraph)
+    println()
     width = g.size^2
-    for i = 1:width, j = 1:width
-        @> begin
-            get_node((i, j), g)
-            get_value
-            string(j == width ? "\n" : " ")
-            print
+    for i = 1:width
+        for j = 1:width
+            @> begin
+                get_node((i, j), g)
+                get_value
+                string(j % 3 == 0 && j != width ? " |" : "")
+                string(j == width ? "\n" : " ")
+                print
+            end
+        end
+        if i % 3 == 0 && i != width
+            print(repeat('-', width * 2 + 3), "\n")
         end
     end
+    println()
 end
 
 function get_neighbors(node::SudokuNode, graph::SudokuGraph)::Vector{SudokuNode}
