@@ -45,11 +45,7 @@ function Base.print(g::SudokuGraph)
         @> begin
             get_node((i, j), g)
             get_value
-            string(if j == width
-                "\n"
-            else
-                " "
-            end)
+            string(j == width ? "\n" : " ")
             print
         end
     end
