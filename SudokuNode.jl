@@ -16,6 +16,10 @@ function get_coordinates(node::SudokuNode)::Tuple{Int,Int,Int}
     return (node.coordinates..., node.cell)
 end
 
+function get_possible_values(node::SudokuNode)::Vector{Int}
+    return node.possible_values
+end
+
 function get_value(node::SudokuNode)::Int
     return node.value
 end
@@ -33,5 +37,10 @@ end
 function set_cell!(node::SudokuNode, size::Int)::SudokuNode
     row, col = node.coordinates .- 1
     node.cell = 1 + floor(((col // size) + row) - (row % size))
+    return node
+end
+
+function remove_possibility!(node::SudokuNode, value::Int)::SudokuNode
+    node.possible_values = [val for val in node.possible_values if val != value]
     return node
 end

@@ -16,7 +16,7 @@ function get_nodes(edge::Edge)::Vector{SudokuNode}
     return collect(edge.nodes)
 end
 
-function get_nodes(edges::Array{Edge})::Vector{SudokuNode}
+function get_nodes(edges::Vector{Edge})::Vector{SudokuNode}
     return get_nodes.(edges)
 end
 

@@ -39,21 +39,32 @@ function get_node(coordinates::Tuple{Int,Int}, graph::SudokuGraph)::SudokuNode
     end
 end
 
+function get_cell(graph::SudokuGraph, i::Int)::Vector{SudokuNode}
+    return @>> begin
+        graph.nodes
+        filter(node -> node.cell == i)
+        collect
+    end
+end
+
 function Base.print(g::SudokuGraph)
+    format_blank = x -> x == 0 ? " " : string(x)
+
     println()
     width = g.size^2
-    for i = 1:width
-        for j = 1:width
+    for i in 1:width
+        for j in 1:width
             @> begin
                 get_node((i, j), g)
                 get_value
-                string(j % 3 == 0 && j != width ? " |" : "")
+                format_blank
+                string(j % g.size == 0 && j != width ? " |" : "")
                 string(j == width ? "\n" : " ")
                 print
             end
         end
-        if i % 3 == 0 && i != width
-            print(repeat('-', width * 2 + 3), "\n")
+        if i % g.size == 0 && i != width
+            println(repeat('~', width * 2 + g.size + (g.size % 2 == 0)))
         end
     end
     println()
@@ -90,4 +101,12 @@ end
 function set_possible_values!(node::SudokuNode, graph::SudokuGraph)::SudokuNode
     node.possible_values = get_possible_values(node, graph)
     return node
+end
+
+function get_blank_nodes(graph::SudokuGraph)::Vector{SudokuNode}
+    return @>> begin
+        graph.nodes
+        filter(x -> get_value(x) == 0)
+        collect
+    end
 end
