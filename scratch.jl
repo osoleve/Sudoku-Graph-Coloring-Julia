@@ -1,5 +1,6 @@
 include("SudokuGraph.jl")
 include("PuzzleBuilder.jl")
+include("test_puzzle.jl")
 
 @time s = SudokuGraph(3)
 
@@ -22,4 +23,6 @@ set_value!(b, 3)
 
 print(s)
 
-print(get_random_puzzle(3, 75))
+get_node((1,1), s)
+
+print(load_puzzle(test_size, test_value_dict))

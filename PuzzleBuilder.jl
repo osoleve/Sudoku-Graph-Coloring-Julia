@@ -3,6 +3,16 @@ include("SudokuGraph.jl")
 using Lazy: any, @>, @>>
 using StatsBase: sample
 
+function load_puzzle(size::Int, values::Dict{Tuple{Int,Int},Int})::SudokuGraph
+    s = SudokuGraph(size)
+
+    for (coordinates, value) in values
+        set_value!(get_node(coordinates, s), value)
+    end
+
+    return s
+end
+
 #WIP, can and will make impossible puzzles
 
 function creates_impossibility(node::SudokuNode, value::Int, graph::SudokuGraph)::Bool
@@ -10,7 +20,7 @@ function creates_impossibility(node::SudokuNode, value::Int, graph::SudokuGraph)
     neighbors = get_neighbors(node, graph)
     cells = get_cell.(fill(graph), 1:9)
 
-    # Check if any require the value
+    # Check if any neighbors require the value
     for neighbor in neighbors
         possible_values = get_possible_values(neighbor)
         if length(possible_values) == 1 && value in possible_values
@@ -24,8 +34,10 @@ function creates_impossibility(node::SudokuNode, value::Int, graph::SudokuGraph)
         if value in get_value.(cell)
             continue
         end
-        # Are there any non-neighboring cells that
-        # can accept the value otherwise?
+        #=
+        Are there any non-neighboring boxes in other cells
+        that can accept the value otherwise?
+        =#
         unblocked = @>> begin
             cell
             filter(x -> value in get_possible_values(x))
@@ -54,8 +66,7 @@ function get_random_puzzle(size::Int, fill_pct::Int)::SudokuGraph
         node = @> sudoku begin
             get_blank_nodes
             set_possible_values!.(fill(sudoku))
-            rand(1)
-            pop!
+            rand
         end
 
         pval = rand(get_possible_values(node))
