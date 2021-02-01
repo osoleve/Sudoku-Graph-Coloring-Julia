@@ -21,7 +21,7 @@ function get_nodes(edges::Vector{Edge})::Vector{SudokuNode}
 end
 
 function are_adjacent(edge::Edge)::Bool
-    a, b = get_coordinates.(edge.nodes)
+    a, b = get_full_coordinates.(edge.nodes)
     return any(a .== b)
 end
 

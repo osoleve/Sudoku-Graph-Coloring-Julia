@@ -1,4 +1,4 @@
-using Lazy: all
+using Lazy: any, all
 
 mutable struct SudokuNode
     coordinates::Tuple{Int,Int}
@@ -10,10 +10,6 @@ mutable struct SudokuNode
     function SudokuNode(coordinates::Tuple{Int,Int})
         return new(coordinates, 0, 0, [])
     end
-end
-
-function get_coordinates(node::SudokuNode)::Tuple{Int,Int,Int}
-    return (node.coordinates..., node.cell)
 end
 
 function get_possible_values(node::SudokuNode)::Vector{Int}
@@ -29,15 +25,24 @@ function set_value!(node::SudokuNode, value::Int)::SudokuNode
     return node
 end
 
-function Base.isequal(a::SudokuNode, b::SudokuNode)::Bool
-    a, b = get_coordinates.((a, b))
-    return all(a .== b)
-end
-
 function set_cell!(node::SudokuNode, size::Int)::SudokuNode
     row, col = node.coordinates .- 1
     node.cell = 1 + floor(((col // size) + row) - (row % size))
     return node
+end
+
+function get_full_coordinates(node::SudokuNode)::Tuple{Int,Int,Int}
+    return (node.coordinates..., node.cell)
+end
+
+function Base.isequal(a::SudokuNode, b::SudokuNode)::Bool
+    a, b = get_full_coordinates.((a, b))
+    return all(a .== b)
+end
+
+function are_adjacent(a::SudokuNode, b::SudokuNode)::Bool
+    a, b = get_full_coordinates.((a, b))
+    return any(a .== b)
 end
 
 function remove_possibility!(node::SudokuNode, value::Int)::SudokuNode
