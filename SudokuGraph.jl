@@ -64,7 +64,7 @@ function Base.print(g::SudokuGraph)
             end
         end
         if i % g.size == 0 && i != width
-            println(repeat('~', width * 2 + g.size + (g.size % 2 == 0)))
+            println(repeat('-', width * 2 + g.size + (g.size % 2 == 0)))
         end
     end
     println()
@@ -109,4 +109,8 @@ function get_blank_nodes(graph::SudokuGraph)::Vector{SudokuNode}
         filter(x -> get_value(x) == 0)
         collect
     end
+end
+
+function is_solved(graph::SudokuGraph)::Bool
+    return length(get_blank_nodes(graph)) == 0
 end

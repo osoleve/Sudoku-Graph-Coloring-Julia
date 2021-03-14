@@ -1,6 +1,7 @@
 include("SudokuGraph.jl")
 include("PuzzleBuilder.jl")
 include("test_puzzle.jl")
+include("PuzzleSolvers.jl")
 
 @time s = SudokuGraph(3)
 
@@ -26,3 +27,7 @@ print(s)
 get_node((1,1), s)
 
 print(load_puzzle(test_size, test_value_dict))
+print(naive_coloring(load_puzzle(test_size, test_value_dict)))
+
+print(load_puzzle(test_size, test_value_dict))
+print(naive_coloring_step!(load_puzzle(test_size, test_value_dict)))
