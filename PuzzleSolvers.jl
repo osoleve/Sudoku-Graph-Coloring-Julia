@@ -1,8 +1,8 @@
 include("SudokuGraph.jl")
 
-function naive_coloring(graph::SudokuGraph)::SudokuGraph
+function naive_coloring!(graph::SudokuGraph)::SudokuGraph
     while !is_solved(graph)
-        graph = naive_coloring_step!(graph)
+        naive_coloring_step!(graph)
     end
 
     return graph
@@ -16,8 +16,8 @@ function naive_coloring_step!(graph::SudokuGraph)::SudokuGraph
 
     node_idxs = findall(x->x==max_saturation, saturations)
 
-    node = nodes[node_idxs[1]]
-    set_value!(node, get_possible_values(node, graph)[1])
+    node = nodes[rand(node_idxs)]
+    set_value!(node, rand(get_possible_values(node, graph)))
 
     return graph
 end
