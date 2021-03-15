@@ -1,6 +1,11 @@
 using Lazy: any, all
 
 mutable struct SudokuNode
+    """A node for constructing sudoku graphs
+
+    Holds a value, its own coordinates, which cell of the board it's in,
+    and what potential values it can have (desaturated values).
+    """
     coordinates::Tuple{Int,Int}
     cell::Int
     value::Int
@@ -26,12 +31,16 @@ function set_value!(node::SudokuNode, value::Int)::SudokuNode
 end
 
 function set_cell!(node::SudokuNode, size::Int)::SudokuNode
+    """Given a node and the size (N) of the sudoku it's in,
+    set the node's cell value. The cell is which of the squares
+    the nodes fall into, numbered 1-N^2 from the top left to bottom right."""
     row, col = node.coordinates .- 1
     node.cell = 1 + floor(((col // size) + row) - (row % size))
     return node
 end
 
 function get_full_coordinates(node::SudokuNode)::Tuple{Int,Int,Int}
+    "Get the 'full' coordinates for a node, in the form (Row, Column, Cell)"
     return (node.coordinates..., node.cell)
 end
 
