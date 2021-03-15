@@ -1,6 +1,8 @@
-# Sudoku-Graph-Coloring-Julia
-WIP
+# Sudoku Generator/Solver
 
-Can load a sudoku puzzle in a peculiar format I came up with on the fly, or generate entirely new puzzles (even if it takes a few tries). 
+Uses a graph built from scratch to use graph coloring so solve sudokus.
 
-Comes with a test puzzle if you want to try to roll your own solutions.
+Call `get_random_puzzle(s, n)` to create a random puzzle, where s is the size of the puzzle you want and n is how many squares you want filled in.
+Defaults to s=3, n=33.
+
+There's an example puzzle in test_puzzle.jl that shows how to format custom puzzles.
