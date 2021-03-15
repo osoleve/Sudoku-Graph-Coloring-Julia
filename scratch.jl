@@ -33,4 +33,5 @@ print(naive_coloring!(SudokuGraph(3)))
 
 print(naive_coloring_partial!(SudokuGraph(3), 20))
 
-print(get_random_puzzle(3, 25))
+print(get_random_puzzle(3, 40))
+print(get_random_puzzle())

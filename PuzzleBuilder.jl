@@ -14,7 +14,7 @@ function load_puzzle(size::Int, values::Dict{Tuple{Int,Int},Int})::SudokuGraph
     return s
 end
 
-function get_random_puzzle(size::Int, filled::Int)::SudokuGraph
+function get_random_puzzle(size::Int=3, filled::Int=33)::SudokuGraph
     graph = SudokuGraph(size)
 
     done = 0
