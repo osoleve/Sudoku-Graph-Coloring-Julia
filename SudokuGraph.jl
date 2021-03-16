@@ -103,6 +103,12 @@ function set_possible_values!(node::SudokuNode, graph::SudokuGraph)::SudokuNode
     return node
 end
 
+function unset_value!(node::SudokuNode, graph::SudokuGraph)::SudokuNode
+    node.value = 0
+    set_possible_values!(node, graph)
+    return node
+end
+
 function get_blank_nodes(graph::SudokuGraph)::Vector{SudokuNode}
     return @>> begin
         graph.nodes
