@@ -45,40 +45,6 @@ function get_cell(graph::SudokuGraph, i::Int)::Vector{SudokuNode}
     end
 end
 
-function Base.print(graph::SudokuGraph)
-    function format_value(value::Int, maxwidth::Int)::String
-        padding = maxwidth - length(string(value))
-
-        if value == 0
-            value = " "
-        else
-            value = string(value)
-        end
-
-        return lpad(value, padding)
-    end
-
-    println()
-    maxwidth = length(string(graph.puzzle_size^2))+1
-    width = graph.puzzle_size^2
-    for i in 1:width
-        for j in 1:width
-            @> begin
-                get_node((i, j), graph)
-                get_value
-                format_value(maxwidth)
-                string(j % graph.puzzle_size == 0 && j != width ? " |" : "")
-                string(j == width ? "\n" : " ")
-                print
-            end
-        end
-        if i % graph.puzzle_size == 0 && i != width
-            println(repeat('-', graph.puzzle_size + maxwidth * graph.puzzle_size^2 + (graph.puzzle_size % 2 == 0)))
-        end
-    end
-    println()
-end
-
 function get_neighbors(node::SudokuNode, graph::SudokuGraph)::Vector{SudokuNode}
     return @>> graph.edges begin
         filter(edge -> node in edge)
@@ -132,4 +98,14 @@ function get_nonblank_nodes(graph::SudokuGraph)::Vector{SudokuNode}
         filter(x -> get_value(x) != 0)
         collect
     end
+end
+
+function confirm_solution_validity(graph::SudokuGraph)::Bool
+    for edge in graph.edges
+        nodes = get_nodes(edge)
+        if get_value(nodes[1]) == get_value(nodes[2])
+            return false
+        end
+    end
+    return true
 end
