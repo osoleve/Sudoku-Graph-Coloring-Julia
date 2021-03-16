@@ -3,8 +3,8 @@
 Uses a homebrew graph to use graph coloring algorithms to generate and solve
 sudokus.
 
-`get_random_puzzle(s, n)` where `s` is the Sudoku size and `n` is the number of
-squares to fill in is guaranteed to generate a valid puzzle, but not guaranteed to
+`get_random_puzzle(s, n)` (where `s` is the Sudoku size and `n` is the number of
+squares to fill in) is guaranteed to generate a valid puzzle, but not guaranteed to
 generate a puzzle with a unique solution.
 
 `solve!(graph)` returns `false` if no valid solution exists for the supplied puzzle.
