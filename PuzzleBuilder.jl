@@ -1,11 +1,8 @@
 include("SudokuGraph.jl")
 include("PuzzleSolver.jl")
 
-using Lazy: any, @>, @>>
-using StatsBase: sample
-
-function load_puzzle(size::Int, values::Dict{Tuple{Int,Int},Int})::SudokuGraph
-    s = SudokuGraph(size)
+function load_puzzle(puzzle_size::Int, values::Dict{Tuple{Int,Int},Int})::SudokuGraph
+    s = SudokuGraph(puzzle_size)
 
     for (coordinates, value) in values
         set_value!(get_node(coordinates, s), value)
@@ -14,18 +11,18 @@ function load_puzzle(size::Int, values::Dict{Tuple{Int,Int},Int})::SudokuGraph
     return s
 end
 
-function load_puzzle_string(size::Int, board::String)::SudokuGraph
-    s = SudokuGraph(size)
+function load_puzzle_string(puzzle_size::Int, board::String)::SudokuGraph
+    s = SudokuGraph(puzzle_size)
     vals = parse.(Int, split(board, ""))
     set_value!.(s.nodes, vals)
     return s
 end
 
-function get_random_puzzle(size::Int=3, filled::Int=33)
-    graph = SudokuGraph(size)
+function get_random_puzzle(puzzle_size::Int=3, filled::Int=33)
+    graph = SudokuGraph(puzzle_size)
     backtracking_coloring!(graph)
 
-    to_remove = size^4 - filled
+    to_remove = puzzle_size^4 - filled
 
     for i in 1:to_remove
         node = rand(get_nonblank_nodes(graph))

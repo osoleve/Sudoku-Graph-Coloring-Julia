@@ -30,12 +30,12 @@ function set_value!(node::SudokuNode, value::Int)::SudokuNode
     return node
 end
 
-function set_cell!(node::SudokuNode, size::Int)::SudokuNode
-    """Given a node and the size (N) of the sudoku it's in,
+function set_cell!(node::SudokuNode, puzzle_size::Int)::SudokuNode
+    """Given a node and the puzzle_size (N) of the sudoku it's in,
     set the node's cell value. The cell is which of the squares
     the nodes fall into, numbered 1-N^2 from the top left to bottom right."""
     row, col = node.coordinates .- 1
-    node.cell = 1 + floor(((col // size) + row) - (row % size))
+    node.cell = 1 + floor(((col // puzzle_size) + row) - (row % puzzle_size))
     return node
 end
 
