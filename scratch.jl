@@ -1,6 +1,6 @@
 include("SudokuGraph.jl")
 include("PuzzleBuilder.jl")
-include("test_puzzle.jl")
+include("test_puzzles.jl")
 include("PuzzleSolver.jl")
 
 using BenchmarkTools
@@ -26,11 +26,7 @@ print(g)
 puzzle_size = 3
 @time print(get_random_puzzle(puzzle_size, puzzle_size^4))
 
-@benchmark get_random_puzzle($puzzle_size, 50)
-@benchmark get_random_puzzle_fast($puzzle_size, 50, 10)
+print(get_random_puzzle())
 
-for i in 0:8
-    print(i, ": ")
-    @btime get_random_puzzle_fast(3, 81, $i)
-    println()
-end
+@benchmark get_random_puzzle()
+@benchmark fast_4_sudoku()

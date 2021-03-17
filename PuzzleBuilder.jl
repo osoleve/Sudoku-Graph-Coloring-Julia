@@ -19,7 +19,7 @@ function get_random_puzzle(puzzle_size::Int=3, filled::Int=33)
     return graph
 end
 
-function fast_get_random_puzzle(puzzle_size::Int=3, filled::Int=33, guesses::Int=10)
+function naive_fast_puzzle(puzzle_size::Int=3, filled::Int=33, guesses::Int=10)
     graph = SudokuGraph(puzzle_size)
 
     for _ in 1:guesses
