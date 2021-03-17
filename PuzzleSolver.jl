@@ -6,7 +6,7 @@ end
 
 function backtracking_coloring!(graph::SudokuGraph)::Bool
     if is_solved(graph)
-        return true
+        return confirm_solution_validity(graph)
     end
 
     nodes = get_blank_nodes(graph)
