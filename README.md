@@ -40,17 +40,17 @@ For examples on how to format a puzzle for loading, check out `4Sudokus.jl` and
 ```julia
 > get_random_puzzle(3, 33)
 
-4     | 9     |
-9 2   |   6 3 | 4
-      |       | 6
+      |   7   |     2
+6   5 | 2 9   | 8   7
+7   2 | 8     |
 ---------------------
-8   2 |   3 9 | 7 4 1
-      |   8 1 |   2
-3 1   |     7 |   5
+3     | 4 5 9 |     1
+1   7 |     2 | 4 9
+2   4 |     7 | 3 8
 ---------------------
-      | 2 1   | 9 8
-9     |   7   | 5 3
-2   7 |     5 |      
+      |   1   |
+8     |     6 | 7 5
+      |     4 | 1
 
 > @time g = fast_4_sudoku(100)
 
