@@ -47,7 +47,7 @@ function fast_4_sudoku(filled::Int=100, steps::Int=1000)
     include("4Sudokus.jl")
 
     graph = load_puzzle(4, rand(base_puzzles))
-    randomly_transform!(graph, steps)
+    derive_new_puzzle!(graph, steps)
 
     to_remove = 4^4 - filled
 
