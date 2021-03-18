@@ -1,24 +1,18 @@
-include("SudokuGraph.jl")
+# Validity-Preserving Transformations
 
-function derive_new_puzzle!(graph::SudokuGraph, steps::Int=1000)
-    """
-    Applies a sequence of validity preserving transformations
-    in order to create a different valid sudoku given a valid sudoku
-    """
-    for _ in 1:steps
-        random_transformation!(graph)
-    end
+include("../structure/graph.jl")
 
-    return graph
-end
+using Random: shuffle
 
 function random_transformation!(graph::SudokuGraph)::SudokuGraph
-    transformation_type = rand(("swap", "rotate"))
+    transformation_type = rand(("swap", "rotate", "relabel"))
 
     s = graph.puzzle_size
 
     if transformation_type == "rotate"
         graph = rotate!(graph)
+    elseif transformation_type == "relabel"
+        graph = relabel!(graph)
     else
         target_type = rand(("row", "column", "band", "stack"))
         targets = collect(1:s)
@@ -37,6 +31,19 @@ function rotate!(graph::SudokuGraph)
 
     return graph
 end
+
+function relabel!(graph::SudokuGraph)::SudokuGraph
+    targets = shuffle(1:graph.puzzle_size^2)
+
+    for node in graph.nodes
+        if node.value != 0
+            node.value = targets[node.value]
+        end
+    end
+
+    return graph
+end
+
 
 function swap!(graph::SudokuGraph, target_type::String, targets::Vector{Int})::SudokuGraph
     s = graph.puzzle_size

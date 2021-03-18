@@ -1,4 +1,4 @@
-include("SudokuGraph.jl")
+include("../structure/graph.jl")
 
 function load_puzzle(puzzle_size::Int, values::Dict{Tuple{Int,Int},Int})::SudokuGraph
     s = SudokuGraph(puzzle_size)

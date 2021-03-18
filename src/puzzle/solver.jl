@@ -1,4 +1,4 @@
-include("SudokuGraph.jl")
+include("../structure/graph.jl")
 
 function is_solved(graph::SudokuGraph)::Bool
     return length(get_blank_nodes(graph)) == 0

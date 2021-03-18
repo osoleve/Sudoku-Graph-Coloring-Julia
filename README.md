@@ -5,23 +5,18 @@ sudokus.
 
 `get_random_puzzle(s::Int=3, n::Int=33)` (where `s` is the Sudoku size and `n` is the number of
 squares to fill in) is guaranteed to generate a valid puzzle, but not guaranteed to
-generate a puzzle with a unique solution. Has been tested on sizes 3 and 4.  
+generate a puzzle with a unique solution.
 
-- Generates 3-sudokus in under a second.
-- Usually takes <30s to generate 4-sudokus from scratch
-- Takes an indeterminate amount of time to create anything bigger (let me know
-  if you manage to create one with it)
+Use `new_puzzle()` with the same arguments as `get_random_puzzle` to print directly.
 
-`fast_4_sudoku(n::Int=100, t::Int=1000)` (where `n` is the number of squares to fill in, and `t`
-is the number of transformation steps) generates a 4-sudoku in under a second
-for `t<=1000` by taking one of the pre-generated 4-sudokus and applying `t` random
-validity-preserving transformations.
+Generates sizes 2 and 3 from scratch. Uses validity-preserving transformations
+to speed up generation of sizes 4 and 5.
 
 `solve!(graph::SudokuGraph)` returns `false` if no valid solution exists for the
  supplied puzzle.
 
-For examples on how to format a puzzle for loading, check out `4Sudokus.jl` and
-`PuzzleIO.jl`
+For examples on how to format a puzzle for loading, check out `src/data` and
+`src/puzzle/io.jl`
 
 2 and 3-sudokus have an extra, simplified input method using a string:
 
@@ -38,7 +33,8 @@ For examples on how to format a puzzle for loading, check out `4Sudokus.jl` and
 ## Generating a puzzle
 
 ```julia
-> get_random_puzzle(3, 33)
+> g = get_random_puzzle(3, 33)
+> print(g)
 
       |   7   |     2
 6   5 | 2 9   | 8   7
@@ -77,6 +73,40 @@ For examples on how to format a puzzle for loading, check out `4Sudokus.jl` and
        2    | 10          |       15 13 |
             |     7     1 |             |       13  5
  8          |    15  4    |  9        6 | 16
+
+ > @time new_puzzle(5)
+
+   0.718280 seconds (4.35 M allocations: 360.685 MiB, 6.02% gc time)
+
+ 11    23 14 19 | 22  6  9  3  7 |     2 18       | 10 12        4 | 21     8 17 16
+22 25  8  7 16 | 21 15 23 20 12 |  5  1  4 10 19 |    11 24  2 17 | 18 14  6  3  9
+ 5     4 10 12 | 11 17 16 13 25 |     7  8    21 |  3  1  9 14 18 | 15    19     2
+ 9 17 13  3 20 |  2 19  1    24 |    16 11 14 25 |  6    22 21    | 23  7  4 10  5
+    2 24    21 | 14  4  5 10  8 |  9 22  6  3 17 |    19 23 16    | 25  1 11 13
+--------------------------------------------------------------------------------
+   20    19 15 |    22 17  9 13 | 25 11 21       |  4 10  6  3    | 14 12 16  2  8
+   21 11     7 |  3     6  4 10 | 17 18          |  2 14  8 12 16 | 20 24  1    15
+18    22  9 17 |        8       |     3  5       | 19 20    24    | 11 21     7 23
+ 3 10  5  4  6 | 24  1    19 20 |       16  2 14 |    23     7 11 | 13 18     9 17
+12 14 16  2  8 |  7 23 25 11    | 15 24    19 20 |  9 13 17 18    | 10  3  5  4  6
+--------------------------------------------------------------------------------
+ 4  3    24  5 |  1 12 11  8 19 | 13 23 20 15 18 | 17 22 14 10  6 |  2 16 21 25  7
+19 16    11  2 |  4 13  3     5 |        9  6 22 |  1     7 23 15 | 24    17    14
+13    21 17 25 | 10  9  2  6    |  1 19     8 16 |     5  3  4    | 12 23 18 15   
+   15 20  8    | 16       24 18 |  3  4 12 17    |        2 13 21 | 22 10  9    19
+      14  6 22 | 23 20 21 17 15 |    25 24 11  7 |       12 19  9 |  5  4 13  1  3
+--------------------------------------------------------------------------------
+ 6    10     4 | 19  2    23 16 |    14 17  1 11 | 18  9 21 22 24 |  3 13     8 25
+14     3 25  9 |  8 11 13 21    | 16 15 23 24 12 |  7  6  1     2 | 19    10 18  4
+ 1 19 18 13 11 |  5 10    14  3 |     9  2 25  6 | 23  8 16 15 12 |  7 17 24 21 20
+16  8  2 15 24 |    18 20     1 |  4  5 10 21  3 | 14 17 13 11 19 |  6  9 12    22
+   12  7 21    |  9 24 22 15  6 | 19 20 13 18  8 | 25        5    | 16 11  2 14  1
+--------------------------------------------------------------------------------
+ 2  9 19 22    |    21    12 23 | 11 13  7     1 | 15 24 18  8 25 |  4  6 20  5
+      25 16 13 | 20  8 24  1 11 | 10  6 15  5  4 | 12    19 17 14 |  9     3 22 18
+   11 17       |     3 19 22  9 | 18 21 25     2 |  5  4 10    23 |  8 15  7    24
+ 7 24 15    18 |  6 25 10  5  4 | 14  8  3 22  9 |     2 20  1 13 |    19 23 11   
+ 8  4  6  5 10 | 15  7 18 16    | 20 17    23 24 | 22 21 11  9  3 |  1 25    12
 ```
 
 ## Solving a puzzle

@@ -1,4 +1,4 @@
-include("SudokuNode.jl")
+include("node.jl")
 
 using Combinatorics: combinations
 

@@ -1,32 +1,11 @@
 include("SudokuGraph.jl")
-include("PuzzleBuilder.jl")
-include("test_puzzles.jl")
-include("PuzzleSolver.jl")
 
-using BenchmarkTools
 
-print(load_puzzle(test_size, test_value_dict))
-print(load_puzzle_string(test_size, test_string))
+s = get_random_puzzle(5, 550)
+print(s)
 
-g = load_puzzle(test_size, test_value_dict)
-print(g)
-@time solve!(g)
-print(g)
+solve!(s)
 
-g = SudokuGraph(3)
-print(g)
-@time solve!(g)
-print(g)
+print(s)
 
-g = SudokuGraph(4)
-print(g)
-@time solve!(g)
-print(g)
-
-puzzle_size = 3
-@time print(get_random_puzzle(puzzle_size, puzzle_size^4))
-
-print(get_random_puzzle())
-
-@benchmark get_random_puzzle()
-@benchmark fast_4_sudoku()
+new_puzzle()
