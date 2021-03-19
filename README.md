@@ -1,7 +1,6 @@
 # Sudoku Generator/Solver
 
-Uses a homebrew graph to use graph coloring algorithms to generate and solve
-sudokus.
+Uses a homebrew graph to generate and solve sudokus.
 
 `get_random_puzzle(s, n)` (where `s` is the Sudoku size and `n` is the number of
 squares to fill in) is guaranteed to generate a valid puzzle, but not guaranteed to
@@ -74,11 +73,11 @@ For examples on how to format a puzzle for loading, check out `src/data` and
             |     7     1 |             |       13  5
  8          |    15  4    |  9        6 | 16
 
- > @time new_puzzle(5)
+> @time new_puzzle(5)
 
    0.718280 seconds (4.35 M allocations: 360.685 MiB, 6.02% gc time)
 
- 11    23 14 19 | 22  6  9  3  7 |     2 18       | 10 12        4 | 21     8 17 16
+11    23 14 19 | 22  6  9  3  7 |     2 18       | 10 12        4 | 21     8 17 16
 22 25  8  7 16 | 21 15 23 20 12 |  5  1  4 10 19 |    11 24  2 17 | 18 14  6  3  9
  5     4 10 12 | 11 17 16 13 25 |     7  8    21 |  3  1  9 14 18 | 15    19     2
  9 17 13  3 20 |  2 19  1    24 |    16 11 14 25 |  6    22 21    | 23  7  4 10  5
