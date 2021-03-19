@@ -22,7 +22,27 @@ function random_transformation!(graph::SudokuGraph)::SudokuGraph
     return graph
 end
 
+function mirror!(graph::SudokuGraph)::SudokuGraph
+    axis = rand([1,2])
+    s = graph.puzzle_size^2
+    for i in 1:s
+        for j in 1:s÷2
+            if axis == 1
+                nodes = get_node.(((i,j),(i,s+1-j)), fill(graph))
+            elseif axis == 2
+                nodes = get_node.(((j,i),(s+1-j,i)), fill(graph))
+            end
+            x,y = get_value.(nodes)
+            set_value!.(nodes, [y,x])
+        end
+    end
+
+    return graph
+end
+
+
 function rotate!(graph::SudokuGraph)
+    "Rotate the graph 270 degrees"
     for node in graph.nodes
         x, y = node.coordinates
         # Plus 1 to account for Julia being 1-indexed
@@ -33,6 +53,7 @@ function rotate!(graph::SudokuGraph)
 end
 
 function relabel!(graph::SudokuGraph)::SudokuGraph
+    "Randomly relabel the numbers in the graph"
     targets = shuffle(1:graph.puzzle_size^2)
 
     for node in graph.nodes
@@ -46,6 +67,7 @@ end
 
 
 function swap!(graph::SudokuGraph, target_type::String, targets::Vector{Int})::SudokuGraph
+    "Swap two rows or columns within a band or stack, or two bands/stacks"
     s = graph.puzzle_size
 
     if target_type in ("row", "column")
