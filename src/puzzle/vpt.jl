@@ -5,7 +5,7 @@ include("../structure/graph.jl")
 using Random: shuffle
 
 function random_transformation!(graph::SudokuGraph)::SudokuGraph
-    transformation_type = rand(("swap", "rotate", "relabel"))
+    transformation_type = rand(("swap", "rotate", "relabel", "mirror"))
 
     s = graph.puzzle_size
 
@@ -13,6 +13,8 @@ function random_transformation!(graph::SudokuGraph)::SudokuGraph
         graph = rotate!(graph)
     elseif transformation_type == "relabel"
         graph = relabel!(graph)
+    elseif transformation_type == "mirror"
+        graph = mirror!(graph)
     else
         target_type = rand(("row", "column", "band", "stack"))
         targets = collect(1:s)
