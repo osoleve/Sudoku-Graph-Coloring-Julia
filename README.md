@@ -3,7 +3,7 @@
 Uses a homebrew graph to use graph coloring algorithms to generate and solve
 sudokus.
 
-`get_random_puzzle(s::Int=3, n::Int=33)` (where `s` is the Sudoku size and `n` is the number of
+`get_random_puzzle(s, n)` (where `s` is the Sudoku size and `n` is the number of
 squares to fill in) is guaranteed to generate a valid puzzle, but not guaranteed to
 generate a puzzle with a unique solution.
 
