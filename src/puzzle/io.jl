@@ -1,6 +1,9 @@
 include("../structure/graph.jl")
 
-function load_puzzle(puzzle_size::Int, values::Dict{Tuple{Int,Int},Int})::SudokuGraph
+function load_puzzle(
+    puzzle_size::Int,
+    values::Dict{Tuple{Int,Int},Int},
+)::SudokuGraph
     s = SudokuGraph(puzzle_size)
 
     for (coordinates, value) in values
@@ -22,7 +25,7 @@ function puzzle_to_string(graph::SudokuGraph)::String
 end
 
 function puzzle_to_dict(graph::SudokuGraph)::Dict{Tuple{Int,Int},Int}
-    return Dict(node.coordinates=>node.value for node in graph.nodes)
+    return Dict(node.coordinates => node.value for node in graph.nodes)
 end
 
 function Base.print(graph::SudokuGraph)
@@ -39,10 +42,10 @@ function Base.print(graph::SudokuGraph)
     end
 
     println()
-    maxwidth = length(string(graph.puzzle_size^2))+1
+    maxwidth = length(string(graph.puzzle_size^2)) + 1
     width = graph.puzzle_size^2
-    for i in 1:width
-        for j in 1:width
+    for i = 1:width
+        for j = 1:width
             @> begin
                 get_node((i, j), graph)
                 get_value
@@ -53,7 +56,10 @@ function Base.print(graph::SudokuGraph)
             end
         end
         if i % graph.puzzle_size == 0 && i != width
-            println(repeat('-', graph.puzzle_size + maxwidth * graph.puzzle_size^2 + (graph.puzzle_size % 2 == 0)))
+            println(repeat(
+                '-',
+                maxwidth * (graph.puzzle_size^2 + graph.puzzle_size - 1) - graph.puzzle_size
+            ))
         end
     end
     println()
