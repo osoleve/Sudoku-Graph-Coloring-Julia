@@ -4,34 +4,74 @@ include("../structure/graph.jl")
 
 using Random: shuffle
 
+@enum Transformation Swap Mirror Rotate Relabel
+@enum Swappable Row Column Band Stack
+@enum Axis Vertical Horizontal
+
 function random_transformation!(graph::SudokuGraph)::SudokuGraph
-    transformation_type = rand(("swap", "rotate", "relabel", "mirror"))
+    transformation_type = rand(instances(Transformation))
+    return transform!(graph, transformation_type)
+end
 
-    s = graph.puzzle_size
+"""
+    transform!(graph::SudokuGraph, type::Transformation)::SudokuGraph
 
-    if transformation_type == "rotate"
+Given a graph and a Transformation, apply the transformation and return the graph.
+"""
+function transform!(graph::SudokuGraph, type::Transformation)::SudokuGraph
+    if type == Rotate
         graph = rotate!(graph)
-    elseif transformation_type == "relabel"
+    elseif type == Relabel
         graph = relabel!(graph)
-    elseif transformation_type == "mirror"
+    elseif type == Mirror
         graph = mirror!(graph)
     else
-        target_type = rand(("row", "column", "band", "stack"))
-        targets = collect(1:s)
-        popat!(targets, rand(1:s))
-        graph = swap!(graph, target_type, targets)
+        swap_type = rand(instances(Swappable))
+        targets = collect(1:graph.psize)
+        targets = shuffle(targets)[1:2]
+        graph = swap!(graph, swap_type, targets)
     end
     return graph
 end
 
+"""
+    mirror!(graph::SudokuGraph)::SudokuGraph
+
+Mirror the puzzle along a random axis.
+"""
 function mirror!(graph::SudokuGraph)::SudokuGraph
-    axis = rand([1,2])
-    s = graph.puzzle_size^2
+    axis = rand(instances(Axis))
+
+    s = graph.psize^2
     for i in 1:s
         for j in 1:s÷2
-            if axis == 1
+
+            if axis == Vertical
                 nodes = get_node.(((i,j),(i,s+1-j)), fill(graph))
-            elseif axis == 2
+            elseif axis == Horizontal
+                nodes = get_node.(((j,i),(s+1-j,i)), fill(graph))
+            end
+
+            x,y = get_value.(nodes)
+            set_value!.(nodes, [y,x])
+        end
+    end
+
+    return graph
+end
+
+"""
+    mirror!(graph::SudokuGraph, axis::Axis)::SudokuGraph
+
+Same as mirror!(graph::SudokuGraph)
+"""
+function mirror!(graph::SudokuGraph, axis::Axis)::SudokuGraph
+    s = graph.psize^2
+    for i in 1:s
+        for j in 1:s÷2
+            if axis == Vertical
+                nodes = get_node.(((i,j),(i,s+1-j)), fill(graph))
+            elseif axis == Horizontal
                 nodes = get_node.(((j,i),(s+1-j,i)), fill(graph))
             end
             x,y = get_value.(nodes)
@@ -42,21 +82,29 @@ function mirror!(graph::SudokuGraph)::SudokuGraph
     return graph
 end
 
+"""
+    rotate!(graph::SudokuGraph)::SudokuGraph
 
+Rotate the puzzle 90 degrees to the left.
+"""
 function rotate!(graph::SudokuGraph)
-    "Rotate the graph 270 degrees"
     for node in graph.nodes
         x, y = node.coordinates
         # Plus 1 to account for Julia being 1-indexed
-        node.coordinates = y, (1 + graph.puzzle_size^2) - x
+        node.coordinates = y, (1 + graph.psize^2) - x
     end
 
     return graph
 end
 
+"""
+    relabel!(graph::SudokuGraph)::SudokuGraph
+
+Relabel the numbers in a puzzle with a random, 1:1 map.
+"""
 function relabel!(graph::SudokuGraph)::SudokuGraph
     "Randomly relabel the numbers in the graph"
-    targets = shuffle(1:graph.puzzle_size^2)
+    targets = shuffle(1:graph.psize^2)
 
     for node in graph.nodes
         if node.value != 0
@@ -67,19 +115,22 @@ function relabel!(graph::SudokuGraph)::SudokuGraph
     return graph
 end
 
+"""
+    swap!(graph::SudokuGraph, swap_type::Swappable, targets::Vector{Int})::SudokuGraph
 
-function swap!(graph::SudokuGraph, target_type::String, targets::Vector{Int})::SudokuGraph
-    "Swap two rows or columns within a band or stack, or two bands/stacks"
-    s = graph.puzzle_size
+"Swap two rows or columns within a band or stack, or two bands/stacks"
+"""
+function swap!(graph::SudokuGraph, swap_type::Swappable, targets::Vector{Int})::SudokuGraph
+    s = graph.psize
 
-    if target_type in ("row", "column")
+    if swap_type in (Row, Column)
         # Pick stack or band to update
-        target_group = rand(1:s)
+        target_group = rand(1:graph.psize)
 
         # Calculate coordinates to update
-        targets .= targets .+ (s * (target_group - 1))
+        targets .= targets .+ (graph.psize * (target_group - 1))
 
-        if target_type == "row"
+        if swap_type == Row
             coord = 1
         else
             coord = 2
@@ -94,9 +145,9 @@ function swap!(graph::SudokuGraph, target_type::String, targets::Vector{Int})::S
     else
         # Swap band or stack (all rows or columns within)
         # Calculate groups to update
-        groups = [collect(1:s) .+ (s * (targets[i] - 1)) for i in 1:2]
+        groups = [collect(1:graph.psize) .+ (graph.psize * (targets[i] - 1)) for i in 1:2]
 
-        if target_type == "band"
+        if swap_type == Band
             coord = 1
         else
             coord = 2

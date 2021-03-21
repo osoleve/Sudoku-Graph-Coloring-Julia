@@ -4,9 +4,9 @@ function is_solved(graph::SudokuGraph)::Bool
     return length(get_blank_nodes(graph)) == 0
 end
 
-function backtracking_coloring!(graph::SudokuGraph)::Bool
+function backtracking_coloring!(graph::SudokuGraph)::Tuple{SudokuGraph,Bool}
     if is_solved(graph)
-        return confirm_solution_validity(graph)
+        return (graph, confirm_solution(graph))
     end
 
     nodes = get_blank_nodes(graph)
@@ -21,13 +21,13 @@ function backtracking_coloring!(graph::SudokuGraph)::Bool
 
     for value in get_possible_values(node)
         set_value!(node, value)
-        if backtracking_coloring!(graph)
-            return true
+        if backtracking_coloring!(graph)[2]
+            return (graph, true)
         end
         unset_value!(node, graph)
     end
 
-    return false
+    return (graph, false)
 end
 
-solve! = backtracking_coloring!
+solve!(x::SudokuGraph) = backtracking_coloring!(x::SudokuGraph)[1]

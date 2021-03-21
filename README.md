@@ -2,17 +2,14 @@
 
 Uses a homebrew graph to generate and solve sudokus.
 
-`get_random_puzzle(s, n)` (where `s` is the Sudoku size and `n` is the number of
+`random_puzzle(s, n)` (where `s` is the Sudoku size and `n` is the number of
 squares to fill in) is guaranteed to generate a valid puzzle, but not guaranteed to
 generate a puzzle with a unique solution.
 
-Use `new_puzzle()` with the same arguments as `get_random_puzzle` to print directly.
+Use `new_puzzle()` with the same arguments as `random_puzzle` to print directly.
 
-Generates sizes 2 and 3 from scratch. Uses validity-preserving transformations
-to speed up generation of sizes 4 and 5.
-
-`solve!(graph::SudokuGraph)` returns `false` if no valid solution exists for the
- supplied puzzle.
+`solve!(graph::SudokuGraph)` ...well, solves the given graph. Currently not
+very fast for larger puzzles.
 
 For examples on how to format a puzzle for loading, check out `src/data` and
 `src/puzzle/io.jl`
@@ -32,7 +29,7 @@ For examples on how to format a puzzle for loading, check out `src/data` and
 ## Generating a puzzle
 
 ```julia
-> g = get_random_puzzle(3, 33)
+> g = random_puzzle(3, 33)
 > print(g)
 
       |   7   |     2
@@ -47,35 +44,35 @@ For examples on how to format a puzzle for loading, check out `src/data` and
 8     |     6 | 7 5
       |     4 | 1
 
-> @time g = fast_4_sudoku(100)
+> @time g = random_puzzle(4);
 
-0.479907 seconds (2.22 M allocations: 144.140 MiB, 3.28% gc time)
+0.074973 seconds (646.10 k allocations: 123.388 MiB)
 
 > print(g)
 
-            |  1          |             |  8 14
-          2 |       14  4 |             |     6 15
-            |             |  4    16    |        5
-16       12 |     6  7    |    14  5  8 |        4
+   10  4    |     3  8    |  9 15  6    | 16 12 13  5
+15 14  6  9 | 13  5 12 16 |  4 10 11  2 |  8  3  7  1
+ 3  1  8  7 | 15  6  9 14 |       12 13 |     4 10 11
+   13 12 16 | 10          |  8          |     6 14 15
 -----------------------------------------------------
- 9    13  3 | 12    10    |    15    16 |  5     2  1
-       7 15 |     5       |     8  1 14 |       12 13
-12 14       |  4  1    15 | 13  5    10 |     8      
-10          |  7    16    |       12  3 |  4 15    14
+    2 11  4 |  7     3    |  6 14 15  9 | 12  5 16
+14  9 15    |    13  5 12 | 11  2 10    |  3  1  8  7
+13 16  5    |  2 10 11    |  3  7  1  8 |    15  9 14
+    7  3    |    15     9 |        5    |  4       10
 -----------------------------------------------------
-            |    14     7 |     2       | 11  5 16
-       5    |       11    |           4 |  9  2  6 10
-   15     9 |             |           5 | 14       12
- 3  2 12    |  5    15    |  8        9 |
+ 8  3     1 |  6  9 14    | 13 12       | 10  2 11  4
+ 4 11       |  3  8  7    | 14     9    | 13 16    12
+12  5 16    | 11  4  2 10 |     3  8  1 | 14  9 15  6
+   15  9    |  5    16    |        4 10 |  7  8     3
 -----------------------------------------------------
-            | 11  2  5 16 | 12 10       | 15
-       2    | 10          |       15 13 |
-            |     7     1 |             |       13  5
- 8          |    15  4    |  9        6 | 16
+ 9  6       | 12 16     5 | 10  4  2 11 |  1  7  3  8
+16 12 13  5 |  4  2 10    |  1  8  7  3 | 15 14  6  9
+ 7  8  1  3 |  9 14 15    |  5    13    | 11 10  4  2
+ 2  4 10 11 |     7  1  3 | 15  9 14  6 |  5 13 12 16
 
 > @time new_puzzle(5)
 
-   0.718280 seconds (4.35 M allocations: 360.685 MiB, 6.02% gc time)
+   0.510008 seconds (3.77 M allocations: 724.684 MiB, 10.26% gc time)
 
 11    23 14 19 | 22  6  9  3  7 |     2 18       | 10 12        4 | 21     8 17 16
 22 25  8  7 16 | 21 15 23 20 12 |  5  1  4 10 19 |    11 24  2 17 | 18 14  6  3  9
@@ -111,7 +108,7 @@ For examples on how to format a puzzle for loading, check out `src/data` and
 ## Solving a puzzle
 
 ```julia
-> g = get_random_puzzle(3, 25)
+> g = random_puzzle(3, 25)
 > print(g)
 
 2 3   | 4   5 |

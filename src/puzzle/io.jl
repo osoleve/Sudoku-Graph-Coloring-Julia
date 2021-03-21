@@ -1,10 +1,10 @@
 include("../structure/graph.jl")
 
 function load_puzzle(
-    puzzle_size::Int,
+    psize::Int,
     values::Dict{Tuple{Int,Int},Int},
 )::SudokuGraph
-    s = SudokuGraph(puzzle_size)
+    s = SudokuGraph(psize)
 
     for (coordinates, value) in values
         set_value!(get_node(coordinates, s), value)
@@ -13,8 +13,8 @@ function load_puzzle(
     return s
 end
 
-function load_puzzle_string(puzzle_size::Int, board::String)::SudokuGraph
-    s = SudokuGraph(puzzle_size)
+function load_puzzle_string(psize::Int, board::String)::SudokuGraph
+    s = SudokuGraph(psize)
     vals = parse.(Int, split(board, ""))
     set_value!.(s.nodes, vals)
     return s
@@ -42,23 +42,23 @@ function Base.print(graph::SudokuGraph)
     end
 
     println()
-    maxwidth = length(string(graph.puzzle_size^2)) + 1
-    width = graph.puzzle_size^2
+    maxwidth = length(string(graph.psize^2)) + 1
+    width = graph.psize^2
     for i = 1:width
         for j = 1:width
             @> begin
                 get_node((i, j), graph)
                 get_value
                 format_value(maxwidth)
-                string(j % graph.puzzle_size == 0 && j != width ? " |" : "")
+                string(j % graph.psize == 0 && j != width ? " |" : "")
                 string(j == width ? "\n" : " ")
                 print
             end
         end
-        if i % graph.puzzle_size == 0 && i != width
+        if i % graph.psize == 0 && i != width
             println(repeat(
                 '-',
-                maxwidth * (graph.puzzle_size^2 + graph.puzzle_size - 1) - graph.puzzle_size
+                maxwidth * (graph.psize^2 + graph.psize - 1) - graph.psize
             ))
         end
     end
