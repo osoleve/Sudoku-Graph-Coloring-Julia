@@ -1,6 +1,6 @@
 # Sudoku Generator/Solver
 
-Uses a homebrew graph solve sudokus.
+Uses a homebrew graph to solve sudokus.
 
 `random_puzzle(s, n)` (where `s` is the Sudoku size and `n` is the number of
 squares to fill in) is guaranteed to generate a valid puzzle, but not guaranteed to
