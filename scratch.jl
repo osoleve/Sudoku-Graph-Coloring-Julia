@@ -1,7 +1,7 @@
-include("SudokuGraph.jl")
+include("src/puzzle/builder.jl")
 
 
-s = get_random_puzzle(5, 550)
+s = random_puzzle(5, 550)
 print(s)
 
 solve!(s)
